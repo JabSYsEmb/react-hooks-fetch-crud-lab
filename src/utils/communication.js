@@ -26,11 +26,12 @@ const create = (newQuestion) => {
     .finally(() => console.log("create called"));
 };
 
-const deleteById = (id) => {
+const deleteQuestion = (questionId) => {
   return axios
-    .delete(`${baseUrl}/${id}`)
+    .delete(`${baseUrl}/${questionId}`)
+    .then((item) => item.status)
     .catch((error) => console.log(error))
     .finally(() => console.log("delete called"));
 };
 
-export { getQuestionList, update, create, deleteById };
+export { getQuestionList, update, create, deleteQuestion };

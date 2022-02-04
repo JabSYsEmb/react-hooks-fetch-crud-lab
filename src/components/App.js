@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getQuestionList } from "../utils/communication";
+import { getQuestionList, deleteQuestion } from "../utils/communication";
 
 import AdminNavBar from "./AdminNavBar";
 import QuestionForm from "./QuestionForm";
@@ -13,6 +13,16 @@ function App() {
     getQuestionList().then((data) => setQuestionsList(data));
   }, []);
 
+  const handleOnDelete = (questionId) => {
+    deleteQuestion(questionId).then(
+      (status) =>
+        status &&
+        setQuestionsList((prev) =>
+          prev.filter((question) => question.id !== questionId)
+        )
+    );
+  };
+
   return (
     <main>
       <AdminNavBar onChangePage={setPage} />
@@ -23,7 +33,10 @@ function App() {
           }
         />
       ) : (
-        <QuestionList questionsList={questionsList} />
+        <QuestionList
+          questionsList={questionsList}
+          handleQuestionOnDelete={(questionId) => handleOnDelete(questionId)}
+        />
       )}
     </main>
   );

@@ -1,13 +1,38 @@
 import React, { useState } from "react";
 import { create } from "../utils/communication";
 
+// {
+//   "id": 1,
+//   "prompt": "What special prop should always be included for lists of elements?",
+//   "answers": [
+//     "id",
+//     "name",
+//     "key",
+//     "prop"
+//   ],
+//   "correctIndex": 2
+// },
+
 const initialState = {
-  prompt: "",
-  answer1: "",
-  answer2: "",
-  answer3: "",
-  answer4: "",
+  prompt: null,
+  answer1: null,
+  answer2: null,
+  answer3: null,
+  answer4: null,
   correctIndex: 0,
+};
+
+const reformateQuestion = (rawQuestion) => {
+  return {
+    prompt: rawQuestion.prompt,
+    answers: [
+      rawQuestion.answer1,
+      rawQuestion.answer2,
+      rawQuestion.answer3,
+      rawQuestion.answer4,
+    ],
+    correctIndex: rawQuestion.correctIndex,
+  };
 };
 function QuestionForm(props) {
   const [formData, setFormData] = useState(initialState);
@@ -22,7 +47,7 @@ function QuestionForm(props) {
   function handleSubmit(event) {
     event.preventDefault();
     const isAllInputsEntered = Object.values(formData)
-      .map((isEmpty) => isEmpty === "")
+      .map((isEmpty) => isEmpty)
       .includes(true);
 
     isAllInputsEntered
@@ -31,8 +56,8 @@ function QuestionForm(props) {
   }
 
   function createNewQuestionAndUpdateState() {
-    create(formData);
-    props.handleOnSubmit(formData);
+    create(reformateQuestion(formData));
+    props.handleOnSubmit(reformateQuestion(formData));
     setFormData(initialState);
   }
 
