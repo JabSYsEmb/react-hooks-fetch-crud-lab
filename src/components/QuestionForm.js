@@ -1,14 +1,16 @@
 import React, { useState } from "react";
+import { create } from "../utils/communication";
 
+const initialState = {
+  prompt: "",
+  answer1: "",
+  answer2: "",
+  answer3: "",
+  answer4: "",
+  correctIndex: 0,
+};
 function QuestionForm(props) {
-  const [formData, setFormData] = useState({
-    prompt: "",
-    answer1: "",
-    answer2: "",
-    answer3: "",
-    answer4: "",
-    correctIndex: 0,
-  });
+  const [formData, setFormData] = useState(initialState);
 
   function handleChange(event) {
     setFormData({
@@ -19,7 +21,19 @@ function QuestionForm(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(formData);
+    const isAllInputsEntered = Object.values(formData)
+      .map((isEmpty) => isEmpty === "")
+      .includes(true);
+
+    isAllInputsEntered
+      ? alert("please fill all input field")
+      : createNewQuestionAndUpdateState();
+  }
+
+  function createNewQuestionAndUpdateState() {
+    create(formData);
+    props.handleOnSubmit(formData);
+    setFormData(initialState);
   }
 
   return (
